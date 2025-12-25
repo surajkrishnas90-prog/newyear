@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cashback Reward</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:monospace}
+
+body{
+  background:#0b1d2a;
+  color:#e8f6f5;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* MAIN BOX */
+.box{
+  background:#122f3a;
+  padding:35px;
+  border-radius:16px;
+  width:90%;
+  max-width:460px;
+  text-align:center;
+}
+
+/* OPTIONS */
+.option{
+  margin-top:12px;
+  padding:14px;
+  border:1px solid #00d1c1;
+  border-radius:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+.option:hover{
+  background:#00d1c1;
+  color:#003;
+}
+
+/* POPUP OVERLAY */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+}
+
+/* SCRATCH CARD */
+#card{
+  width:320px;
+  height:170px;
+  border-radius:18px;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,#0f3,#9f6);
+  box-shadow:0 20px 40px rgba(0,0,0,0.6);
+}
+
+#prize{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:38px;
+  font-weight:bold;
+  color:#003;
+}
+
+canvas{
+  position:absolute;
+  inset:0;
+  border-radius:18px;
+}
+
+#afterText{
+  display:none;
+  margin-top:20px;
+  font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h3>Cashback Quiz 💸</h3>
+  <p>Q1: My birthday?</p>
+
+  <div class="option" onclick="choose('26092006')">26-09-2006</div>
+  <div class="option" onclick="choose('25092006')">25-09-2006</div>
+  <div class="option" onclick="choose('26092005')">26-09-2005</div>
+  <div class="option" onclick="choose('27092006')">27-09-2006</div>
+</div>
+
+<!-- SCRATCH POPUP -->
+<div id="overlay">
+  <div>
+    <p style="text-align:center;margin-bottom:12px;">
+      Scratch to reveal your reward 🎁
+    </p>
+    <div id="card">
+      <div id="prize"></div>
+      <canvas id="scratch"></canvas>
+    </div>
+    <div id="afterText"><strong>nooki iruno ippam kittum 😌</strong></div>
+  </div>
+</div>
+
+<!-- GOOGLE FORM -->
+<form id="trackForm"
+  action="https://docs.google.com/forms/d/e/1FAIpQLScyZl0ro8xRNy57b9pX0xgYyE5QNDqK-M8NDwzFjdOqclvC_g/formResponse"
+  method="POST"
+  target="hidden_iframe"
+  style="display:none;">
+  <input name="entry.2141799663" id="formData">
+</form>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
+<script>
+const CORRECT="26092006";
+
+/* WEIGHTED RANDOM */
+function getPrize(){
+  const r=Math.random();
+  if(r<0.70) return Math.floor(Math.random()*20)+1;       // ₹1–20
+  if(r<0.95) return Math.floor(Math.random()*30)+21;      // ₹21–50
+  return Math.floor(Math.random()*50)+51;                 // ₹51–100
+}
+
+const prizeAmount=getPrize();
+document.getElementById("prize").innerText="₹"+prizeAmount;
+
+function choose(val){
+  if(val!==CORRECT){
+    document.getElementById("formData").value="Cashback Quiz | WRONG";
+    document.getElementById("trackForm").submit();
+    window.location.href="end.html";
+    return;
+  }
+
+  document.getElementById("formData").value="Cashback Quiz | CORRECT";
+  document.getElementById("trackForm").submit();
+
+  document.getElementById("overlay").style.display="flex";
+  initScratch();
+}
+
+function initScratch(){
+  const canvas=document.getElementById("scratch");
+  const ctx=canvas.getContext("2d");
+  canvas.width=320;
+  canvas.height=170;
+
+  const grad=ctx.createLinearGradient(0,0,320,170);
+  grad.addColorStop(0,"#bbb");
+  grad.addColorStop(0.5,"#999");
+  grad.addColorStop(1,"#ccc");
+
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.globalCompositeOperation="destination-out";
+
+  let scratching=false;
+
+  function scratch(e){
+    if(!scratching) return;
+    const r=canvas.getBoundingClientRect();
+    const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+    const y=(e.touches?e.touches[0].clientY:e.clientY)-r.top;
+    ctx.beginPath();
+    ctx.arc(x,y,22,0,Math.PI*2);
+    ctx.fill();
+    checkReveal();
+  }
+
+  canvas.onmousedown=()=>scratching=true;
+  canvas.onmouseup=()=>scratching=false;
+  canvas.onmousemove=scratch;
+
+  canvas.ontouchstart=()=>scratching=true;
+  canvas.ontouchend=()=>scratching=false;
+  canvas.ontouchmove=scratch;
+}
+
+function checkReveal(){
+  const canvas=document.getElementById("scratch");
+  const ctx=canvas.getContext("2d");
+  const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+  let clear=0;
+  for(let i=3;i<data.length;i+=4){
+    if(data[i]===0) clear++;
+  }
+  const percent=clear/(canvas.width*canvas.height)*100;
+  if(percent>45){
+    document.getElementById("afterText").style.display="block";
+  }
+}
+</script>
+
+</body>
+</html>
