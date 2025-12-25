@@ -6,13 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:monospace;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:monospace}
 body{
   background:#0b1d2a;
   color:#e8f6f5;
@@ -21,7 +15,6 @@ body{
   align-items:center;
   justify-content:center;
 }
-
 .container{
   background:#122f3a;
   padding:40px;
@@ -29,134 +22,42 @@ body{
   text-align:center;
   width:90%;
   max-width:420px;
-  animation:fadeIn 1.5s ease;
 }
-
-p{
-  font-size:18px;
-  margin-bottom:20px;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  font-size:16px;
-  border-radius:6px;
-  border:none;
-  outline:none;
-}
-
 button{
   margin-top:20px;
   padding:12px 28px;
   background:#00d1c1;
-  color:#003;
   border:none;
   border-radius:6px;
   cursor:pointer;
-  font-size:16px;
-}
-
-button:hover{
-  opacity:0.9;
-}
-
-img{
-  width:160px;
-  height:160px;
-  object-fit:cover;
-  border-radius:50%;
-  margin-top:25px;
-  opacity:0;
-  transform:scale(0.7);
-  animation:pop 1s forwards;
-}
-
-h1{
-  margin-top:20px;
-  font-size:26px;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-@keyframes pop{
-  to{opacity:1;transform:scale(1)}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="box">
-  <p>One last thing.</p>
-  <p>Tell me your name.</p>
-
-  <input id="nameInput" placeholder="Type your name">
-  <button onclick="submitData()">Continue</button>
+<div class="container">
+  <h2>Happy New Year 🎉</h2>
+  <p>Hope this year treats you better.</p>
+  <button id="continueBtn">Continue</button>
 </div>
 
-<!-- BACKGROUND MUSIC (RAW LINK) -->
 <audio id="music"
   src="https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/Lovely(BigTzet%20Amapiano%20R%20emix%202021).mp3"
-  loop>
-</audio>
-
-<!-- HIDDEN GOOGLE FORM -->
-<form id="trackForm"
-  action="https://docs.google.com/forms/d/e/1FAIpQLScyZl0ro8xRNy57b9pX0xgYyE5QNDqK-M8NDwzFjdOqclvC_g/formResponse"
-  method="POST"
-  target="hidden_iframe"
-  style="display:none;">
-  <input name="entry.2141799663" id="formName">
-</form>
-<iframe name="hidden_iframe" style="display:none;"></iframe>
+  preload="auto"
+></audio>
 
 <script>
-/* FRIEND → PHOTO (RAW LINKS – YOU CAN ADD MORE) */
-const friends = {
-  "atlanta": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/atlanta.jpeg",
-  "ali": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/ali.jpeg",
-  "ammu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/ammu.jpeg",
-  "kichu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/kichu.jpeg",
-  "mani": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/mani.jpeg",
-  "nibin": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/nibin.jpeg",
-  "unni": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/unni.jpeg"
+const btn=document.getElementById("continueBtn");
+const music=document.getElementById("music");
+
+btn.onclick=()=>{
+  music.volume=0.25;
+  music.play().catch(()=>{});
+  setTimeout(()=>{
+    window.location.href="cashback.html";
+  },2000);
 };
-
-function normalize(text){
-  return text.toLowerCase().trim();
-}
-
-function submitData(){
-  const name = normalize(document.getElementById("nameInput").value);
-  if(!name) return;
-
-  /* PLAY MUSIC (USER CLICK → ALLOWED) */
-  const music = document.getElementById("music");
-  music.volume = 0.25;
-  music.play();
-
-  /* SEND NAME TO GOOGLE FORM */
-  document.getElementById("formName").value = name;
-  document.getElementById("trackForm").submit();
-
-  const box = document.getElementById("box");
-
-  if(friends[name]){
-    box.innerHTML = `
-      <img src="${friends[name]}" alt="${name}">
-      <h1>Happy New Year, ${name} 🎉</h1>
-    `;
-  } else {
-    box.innerHTML = `
-      <h1>Happy New Year 🎉</h1>
-      <p>Wishing you a calm and beautiful year ahead.</p>
-    `;
-  }
-}
 </script>
 
 </body>
