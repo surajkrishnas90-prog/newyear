@@ -17,6 +17,21 @@ body{
   overflow:hidden;
 }
 
+/* overlay */
+#startOverlay{
+  position:fixed;
+  inset:0;
+  background:#0b1d2a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#e8f6f5;
+  font-family:monospace;
+  font-size:16px;
+  z-index:10;
+  cursor:pointer;
+}
+
 /* falling photos */
 img{
   position:absolute;
@@ -35,14 +50,14 @@ img{
 
 <body>
 
-<!-- BACKGROUND MUSIC -->
+<div id="startOverlay">Tap to continue</div>
+
 <audio id="music"
   src="Lovely(BigTzet Amapiano Remix 2021).mp3"
   loop>
 </audio>
 
 <script>
-/* YOUR PHOTOS (exact file names from your repo) */
 const images = [
   "me1.jpeg","me2.jpeg","me3.jpeg","me4.jpeg",
   "me5.jpeg","me6.jpeg","me7.jpeg","me8.jpeg",
@@ -50,28 +65,33 @@ const images = [
 ];
 
 const music = document.getElementById("music");
+const overlay = document.getElementById("startOverlay");
 
-/* start music after first click (browser-safe) */
-document.addEventListener("click", ()=>{
-  music.volume = 0.25;   // soft & clean
+/* start EVERYTHING on user tap */
+overlay.addEventListener("click", ()=>{
+  overlay.style.display = "none";
+
+  music.volume = 0.25;
   music.play();
-},{ once:true });
 
-/* create photo rain */
-setInterval(()=>{
-  const img = document.createElement("img");
-  img.src = images[Math.floor(Math.random()*images.length)];
-  img.style.left = Math.random()*100 + "vw";
-  img.style.animationDuration = (7 + Math.random()*7) + "s";
-  document.body.appendChild(img);
+  startRain();
 
-  setTimeout(()=>img.remove(),14000);
-},500);
+  setTimeout(()=>{
+    window.location.href = "name.html";
+  },14000);
+});
 
-/* move to next page automatically */
-setTimeout(()=>{
-  window.location.href = "name.html";
-},14000);
+/* photo rain */
+function startRain(){
+  setInterval(()=>{
+    const img = document.createElement("img");
+    img.src = images[Math.floor(Math.random()*images.length)];
+    img.style.left = Math.random()*100 + "vw";
+    img.style.animationDuration = (7 + Math.random()*7) + "s";
+    document.body.appendChild(img);
+    setTimeout(()=>img.remove(),14000);
+  },500);
+}
 </script>
 
 </body>
