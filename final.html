@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy New Year</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:monospace;
+}
+
+body{
+  background:#0b1d2a;
+  color:#e8f6f5;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.container{
+  text-align:center;
+  background:#122f3a;
+  padding:40px;
+  border-radius:14px;
+  width:90%;
+  max-width:420px;
+  animation:fadeIn 1.5s ease;
+  position:relative;
+}
+
+p{
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  font-size:16px;
+  border-radius:6px;
+  border:none;
+  outline:none;
+}
+
+button{
+  margin-top:20px;
+  padding:12px 28px;
+  background:#00d1c1;
+  color:#003;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+img{
+  width:160px;
+  height:160px;
+  object-fit:cover;
+  border-radius:50%;
+  margin-top:25px;
+  opacity:0;
+  transform:scale(0.7);
+  animation:pop 1s forwards;
+}
+
+h1{
+  margin-top:20px;
+  font-size:26px;
+}
+
+.cashback{
+  position:absolute;
+  top:-80px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0f3;
+  color:#000;
+  padding:12px 20px;
+  border-radius:10px;
+  font-size:16px;
+  opacity:0;
+  animation:drop 1s forwards;
+}
+
+.fake-note{
+  margin-top:15px;
+  font-size:14px;
+  opacity:0.8;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes pop{
+  to{opacity:1;transform:scale(1)}
+}
+
+@keyframes drop{
+  to{top:10px;opacity:1}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="box">
+  <p>One last thing.</p>
+  <p>Tell me your name.</p>
+
+  <input id="friendName" placeholder="Type your name">
+  <button onclick="showWish()">Continue</button>
+</div>
+
+<script>
+const friends = {
+  "atlanta": "atlanta.jpeg",
+  "ali": "ali.jpeg",
+  "ammu": "ammu.jpeg",
+  "kichu": "kichu.jpeg",
+  "mani": "mani.jpeg",
+  "nibin": "nibin.jpeg",
+  "unni": "unni.jpeg"
+};
+
+function normalize(text){
+  return text.toLowerCase().trim();
+}
+
+function showWish(){
+  const name = normalize(document.getElementById("friendName").value);
+  if(!name) return;
+
+  const box = document.getElementById("box");
+
+  if(friends[name]){
+    box.innerHTML = `
+      <img src="${friends[name]}" alt="${name}">
+      <h1>Happy New Year, ${name} 🎉</h1>
+      <div class="cashback">💸 Cashback credited ₹999</div>
+      <div class="fake-note">Just kidding 😄<br>You already got something better — memories.</div>
+    `;
+  } else {
+    box.innerHTML = `
+      <h1>Happy New Year 🎉</h1>
+      <p>Wishing you a calm and beautiful year ahead.</p>
+      <div class="cashback">💸 Cashback credited ₹999</div>
+      <div class="fake-note">Relax 😄 It’s just for fun.</div>
+    `;
+  }
+}
+</script>
+
+</body>
+</html>
