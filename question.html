@@ -19,18 +19,14 @@ body{
   min-height:200vh;
 }
 
-/* content */
-.content{
-  max-width:700px;
-  margin:auto;
-  padding:80px 20px;
+/* center text */
+.center-text{
+  position:fixed;
+  top:40%;
+  width:100%;
   text-align:center;
-}
-
-.content p{
-  font-size:20px;
-  margin:80px 0;
-  opacity:0.85;
+  font-size:18px;
+  opacity:0.6;
 }
 
 /* popup overlay */
@@ -62,7 +58,7 @@ body{
 }
 
 .popup p{
-  margin:15px 0;
+  margin-bottom:15px;
   font-size:18px;
 }
 
@@ -101,11 +97,8 @@ button:hover{
 
 <body>
 
-<div class="content">
-  <p>Some things are only meant for people who truly know you.</p>
-  <p>This isn’t a test.</p>
-  <p>Just a small check.</p>
-  <p>Scroll slowly.</p>
+<div class="center-text">
+  Scroll slowly
 </div>
 
 <!-- POPUP -->
@@ -128,7 +121,7 @@ function normalize(text){
 
 /* show popup after scroll */
 window.addEventListener("scroll", ()=>{
-  if(window.scrollY > 250 && !popupShown){
+  if(window.scrollY > 200 && !popupShown){
     popupShown = true;
     document.getElementById("overlay").style.display = "flex";
     setTimeout(()=>{
@@ -142,28 +135,18 @@ function check(){
 
   if(!input) return;
 
+  // correct answers
   if(input === "raiden" || input === "b2wraiden"){
-    window.location.href = "gate.html"; // or memories.html
+    // ✅ CHANGE THIS to your next page if needed
+    window.location.href = "memories.html";
   } else {
     attempts--;
     document.getElementById("tries").innerText =
       "Attempts left: " + attempts;
 
     if(attempts <= 0){
-      document.body.innerHTML = `
-        <div style="
-          height:100vh;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          font-family:monospace;
-          color:#e8f6f5;
-          background:#0b1d2a;
-          font-size:22px;
-        ">
-          sorryyyy.
-        </div>
-      `;
+      // ❌ failed 5 times → white page
+      window.location.href = "end.html";
     }
   }
 }
