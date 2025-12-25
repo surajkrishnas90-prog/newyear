@@ -10,26 +10,47 @@
 body{background:#000;color:#00ffcc;overflow:hidden}
 .stage{display:none;width:100vw;height:100vh;align-items:center;justify-content:center;text-align:center;padding:20px}
 .active{display:flex}
-button,input{background:#000;color:#00ffcc;border:1px solid #00ffcc;padding:12px 18px;margin:10px;font-size:16px}
+button,input{
+  background:#000;color:#00ffcc;border:1px solid #00ffcc;
+  padding:12px 18px;margin:10px;font-size:16px
+}
 button:hover{background:#00ffcc;color:#000;cursor:pointer}
-#glitchBox{position:absolute;border:1px solid #00ffcc;padding:20px;animation:glitch 0.2s infinite;text-shadow:2px 0 red,-2px 0 cyan}
-@keyframes glitch{0%{transform:translate(0)}50%{transform:translate(3px,-3px)}100%{transform:translate(0)}}
+#glitchBox{
+  position:absolute;
+  border:1px solid #00ffcc;
+  padding:20px;
+  animation:glitch 0.2s infinite;
+  text-shadow:2px 0 red,-2px 0 cyan;
+}
+@keyframes glitch{
+  0%{transform:translate(0)}
+  50%{transform:translate(3px,-3px)}
+  100%{transform:translate(0)}
+}
 .story p{margin:18px;font-size:22px;opacity:.85}
 .white{background:#fff}
 #error{animation:shake .2s infinite}
-@keyframes shake{0%{transform:translate(0)}50%{transform:translate(10px)}100%{transform:translate(0)}}
-#snow img{position:absolute;width:min(80px,20vw);animation:fall linear infinite;opacity:.9}
-@keyframes fall{from{top:-100px}to{top:110vh}}
+@keyframes shake{
+  0%{transform:translate(0)}
+  50%{transform:translate(10px)}
+  100%{transform:translate(0)}
+}
+#snow img{
+  position:absolute;
+  width:min(80px,20vw);
+  animation:fall linear infinite;
+  opacity:.9;
+}
+@keyframes fall{
+  from{top:-100px}
+  to{top:110vh}
+}
 .fadeBlack{animation:fade 3s forwards}
 @keyframes fade{to{background:#000;color:#000}}
 </style>
 </head>
 
 <body>
-
-<!-- AUDIO -->
-<audio id="typeSound" src="audio/type.mp3"></audio>
-<audio id="bgMusic" src="audio/song.mp3"></audio>
 
 <!-- STAGE 1 -->
 <div id="stage1" class="stage active">
@@ -40,13 +61,11 @@ button:hover{background:#00ffcc;color:#000;cursor:pointer}
 <div id="stage2" class="stage">
   <div class="story">
     <p>2024 wasn’t kind.</p>
-    <p>Lost some friends. Gained silence.</p>
+    <p>Lost some friends.</p>
+    <p>Gained silence.</p>
     <p>Learned who stayed.</p>
     <p>Learned who mattered.</p>
-    <p>Some days I felt strong.</p>
-    <p>Some nights broke me.</p>
-    <p>But I’m still here.</p>
-    <p>And that means something.</p>
+    <p>Still standing.</p>
     <button onclick="endHere()">END HERE</button>
     <button onclick="goQuestion()">PROCEED</button>
   </div>
@@ -58,14 +77,14 @@ button:hover{background:#00ffcc;color:#000;cursor:pointer}
 <!-- STAGE 4 QUESTION -->
 <div id="stage4" class="stage">
   <div>
-    <p>Answer honestly.</p>
+    <p>Answer this to continue</p>
     <p>What year are we entering?</p>
     <input id="answer">
     <button onclick="checkAnswer()">SUBMIT</button>
   </div>
 </div>
 
-<!-- STAGE 5 PHOTOS -->
+<!-- STAGE 5 PHOTO RAIN -->
 <div id="stage5" class="stage">
   <div id="snow"></div>
 </div>
@@ -73,9 +92,8 @@ button:hover{background:#00ffcc;color:#000;cursor:pointer}
 <!-- STAGE 6 NAME -->
 <div id="stage6" class="stage">
   <div>
-    <p id="ipText"></p>
-    <p>Identify yourself.</p>
-    <input id="nameInput">
+    <p>Identify yourself</p>
+    <input id="nameInput" placeholder="Enter name">
     <button onclick="submitName()">ENTER</button>
   </div>
 </div>
@@ -85,7 +103,7 @@ button:hover{background:#00ffcc;color:#000;cursor:pointer}
   <h1 id="finalText"></h1>
 </div>
 
-<!-- GOOGLE FORM -->
+<!-- GOOGLE FORM (LOGGING) -->
 <form id="logForm"
 action="https://docs.google.com/forms/d/e/FORM_ID_HERE/formResponse"
 method="POST" target="hidden_iframe">
@@ -96,15 +114,18 @@ method="POST" target="hidden_iframe">
 <script>
 const stages=document.querySelectorAll(".stage");
 const glitch=document.getElementById("glitchBox");
-const typeSound=document.getElementById("typeSound");
 
-function show(id){stages.forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function show(id){
+  stages.forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
 
+/* glitch button stays 0.7 sec */
 setInterval(()=>{
-glitch.style.top=Math.random()*80+"vh";
-glitch.style.left=Math.random()*80+"vw";
-glitch.style.opacity=Math.random();
-},1100);
+  glitch.style.top=Math.random()*80+"vh";
+  glitch.style.left=Math.random()*80+"vw";
+  glitch.style.opacity=Math.random();
+},700);
 
 glitch.onclick=()=>show("stage2");
 
@@ -112,58 +133,62 @@ function endHere(){show("whiteEnd")}
 function goQuestion(){show("stage4")}
 
 function checkAnswer(){
-if(document.getElementById("answer").value.trim()=="2025"){
-show("stage6");
-}else{
-document.body.id="error";
-alert("SYSTEM BREACH");
-setTimeout(()=>location.reload(),1500);
-}
+  if(document.getElementById("answer").value.trim()=="2025"){
+    show("stage6");
+  }else{
+    document.body.id="error";
+    alert("ACCESS DENIED");
+    setTimeout(()=>location.reload(),1500);
+  }
 }
 
+/* NAME → PHOTOS (USING YOUR FILES) */
 const people={
-"suraj":[...Array(12)].map((_,i)=>`images/you/y${i+1}.jpg`),
-"arjun":["images/arjun/a1.jpg"],
-"rahul":["images/rahul/r1.jpg"],
-"anu":["images/anu/a1.jpg"],
-"sree":["images/sree/s1.jpg"],
-"akash":["images/akash/a1.jpg"],
-"amal":["images/amal/a1.jpg"]
+  "suraj":[
+    "me1.jpeg","me2.jpeg","me3.jpeg","me4.jpeg","me5.jpeg","me6.jpeg",
+    "me7.jpeg","me8.jpeg","me9.jpeg","me10.jpeg","me11.jpeg","me12.jpeg"
+  ],
+  "anu":["anu.jpeg"],
+  "arjun":["arjun.jpeg"],
+  "amal":["amal.jpeg"],
+  "akash":["akash.jpeg"],
+  "rahul":["rahul.jpeg"],
+  "sree":["sree.jpeg"],
+  "nibin":["nibin.jpeg"]
 };
 
-document.getElementById("ipText").innerText=
-"Location detected: "+(navigator.language||"unknown");
-
 function startSnow(arr){
-document.getElementById("bgMusic").play();
-if(!arr)return;
-setInterval(()=>{
-let img=document.createElement("img");
-img.loading="lazy";
-img.src=arr[Math.floor(Math.random()*arr.length)];
-img.style.left=Math.random()*100+"vw";
-img.style.animationDuration=5+Math.random()*5+"s";
-snow.appendChild(img);
-setTimeout(()=>img.remove(),10000);
-},300);
+  if(!arr) return;
+  const snow=document.getElementById("snow");
+  setInterval(()=>{
+    const img=document.createElement("img");
+    img.loading="lazy";
+    img.src=arr[Math.floor(Math.random()*arr.length)];
+    img.style.left=Math.random()*100+"vw";
+    img.style.animationDuration=5+Math.random()*5+"s";
+    snow.appendChild(img);
+    setTimeout(()=>img.remove(),10000);
+  },300);
 }
 
 function submitName(){
-const name=document.getElementById("nameInput").value.toLowerCase().trim();
-document.getElementById("logName").value=name;
-document.getElementById("logForm").submit();
+  const name=document.getElementById("nameInput").value.toLowerCase().trim();
 
-show("stage5");
-startSnow(people[name]);
+  /* log EVERY name */
+  document.getElementById("logName").value=name;
+  document.getElementById("logForm").submit();
 
-show("stage7");
-document.getElementById("finalText").innerText=
-name in people ? `HAPPY NEW YEAR ${name.toUpperCase()}` : "ACCESS LIMITED";
+  show("stage5");
+  startSnow(people[name]);
 
-setTimeout(()=>{
-document.body.classList.add("fadeBlack");
-document.body.innerHTML="";
-},6000);
+  show("stage7");
+  document.getElementById("finalText").innerText =
+    name in people ? `HAPPY NEW YEAR ${name.toUpperCase()}` : "ACCESS LIMITED";
+
+  setTimeout(()=>{
+    document.body.classList.add("fadeBlack");
+    document.body.innerHTML="";
+  },6000);
 }
 </script>
 
