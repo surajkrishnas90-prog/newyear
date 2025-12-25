@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Looking Back</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:monospace;
+}
+
+body{
+  background:#020c14;
+  color:#e6f2f1;
+  overflow-x:hidden;
+}
+
+/* container */
+.container{
+  min-height:200vh;
+  padding:80px 20px;
+  max-width:720px;
+  margin:auto;
+}
+
+/* scroll hint */
+.hint{
+  text-align:center;
+  font-size:13px;
+  opacity:0.5;
+  margin-bottom:60px;
+}
+
+/* story lines */
+.line{
+  opacity:0;
+  transform:translateY(25px);
+  transition:all 0.9s ease;
+  margin:70px 0;
+  font-size:22px;
+  text-align:center;
+}
+
+.line.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* buttons */
+.buttons{
+  margin-top:100px;
+  text-align:center;
+}
+
+button{
+  background:transparent;
+  color:#00ffcc;
+  border:1px solid #00ffcc;
+  padding:14px 26px;
+  margin:12px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#00ffcc;
+  color:#000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="hint">Scroll when you’re ready</div>
+
+  <div class="line">This year didn’t come with warnings.</div>
+  <div class="line">Some people walked away quietly.</div>
+  <div class="line">Some stayed without saying much.</div>
+  <div class="line">I learned the difference.</div>
+  <div class="line">There were days I felt lost.</div>
+  <div class="line">There were nights I kept going anyway.</div>
+  <div class="line">Not everything healed.</div>
+  <div class="line">But I did change.</div>
+  <div class="line">And that counts.</div>
+
+  <div class="buttons line">
+    <button onclick="endHere()">END HERE</button>
+    <button onclick="proceed()">PROCEED</button>
+  </div>
+
+</div>
+
+<script>
+const lines = document.querySelectorAll(".line");
+
+function reveal(){
+  lines.forEach(line=>{
+    const pos = line.getBoundingClientRect().top;
+    if(pos < window.innerHeight - 120){
+      line.classList.add("show");
+    }
+  });
+}
+
+window.addEventListener("scroll", reveal);
+reveal();
+
+function endHere(){
+  window.location.href = "end.html";
+}
+
+function proceed(){
+  window.location.href = "question.html";
+}
+</script>
+
+</body>
+</html>
