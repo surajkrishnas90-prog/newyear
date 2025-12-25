@@ -35,4 +35,85 @@ body{
   text-align:center;
   font-size:13px;
   opacity:0.6;
-  displa
+  display:none;
+}
+
+/* falling images */
+img{
+  position:absolute;
+  width:min(90px,22vw);
+  opacity:0.85;
+  border-radius:6px;
+  animation:fall linear infinite;
+}
+
+@keyframes fall{
+  from{top:-120px}
+  to{top:110vh}
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">Tap to continue</div>
+<div id="ending">Moving on…</div>
+
+<audio id="music" preload="auto"></audio>
+
+<script>
+const images=[
+  "me1.jpeg","me2.jpeg","me3.jpeg","me4.jpeg",
+  "me5.jpeg","me6.jpeg","me7.jpeg","me8.jpeg",
+  "me9.jpeg","me10.jpeg","me11.jpeg","me12.jpeg"
+];
+
+/* BOTH SONGS (RAW LINKS ONLY) */
+const songs=[
+  "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/Lovely(BigTzet%20Amapiano%20R%20emix%202021).mp3",
+  "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/Nila%20Kaayum.mp3"
+];
+
+const start=document.getElementById("start");
+const ending=document.getElementById("ending");
+const music=document.getElementById("music");
+
+let started=false;
+
+start.addEventListener("click",()=>{
+  if(started) return;
+  started=true;
+
+  start.style.display="none";
+
+  /* pick random song */
+  const song=songs[Math.floor(Math.random()*songs.length)];
+  music.src=song;
+
+  try{
+    music.volume=0.25;
+    music.play().catch(()=>{});
+  }catch(e){}
+
+  /* photo rain */
+  setInterval(()=>{
+    const img=document.createElement("img");
+    img.src=images[Math.floor(Math.random()*images.length)];
+    img.style.left=Math.random()*100+"vw";
+    img.style.animationDuration=(7+Math.random()*7)+"s";
+    document.body.appendChild(img);
+    setTimeout(()=>img.remove(),14000);
+  },500);
+
+  /* ending hint */
+  setTimeout(()=>ending.style.display="block",9000);
+
+  /* redirect */
+  setTimeout(()=>{
+    window.location.href="final.html";
+  },12000);
+});
+</script>
+
+</body>
+</html>
