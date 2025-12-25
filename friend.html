@@ -84,7 +84,7 @@ img{
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-/* FRIEND NAME → PHOTO (RAW LINKS ONLY) */
+/* FRIEND NAME → PHOTO (RAW LINKS FROM GITHUB) */
 const friends = {
   "atlanta":"https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/atlanta.jpeg",
   "ali":"https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/ali.jpeg",
@@ -95,31 +95,39 @@ const friends = {
   "unni":"https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/unni.jpeg"
 };
 
-function normalize(t){
-  return t.toLowerCase().trim();
+function normalize(text){
+  return text.toLowerCase().trim();
 }
 
 function start(){
   const name = normalize(document.getElementById("fname").value);
   if(!name) return;
 
-  /* play song (user click) */
+  /* PLAY MUSIC */
   const music = document.getElementById("music");
   music.volume = 0.25;
   music.play().catch(()=>{});
 
-  /* log name */
+  /* LOG NAME */
   document.getElementById("formName").value = name;
   document.getElementById("trackForm").submit();
 
-  /* show photo if known */
+  /* SHOW FRIEND PHOTO + NEW YEAR MESSAGE */
+  const box = document.getElementById("box");
   const img = document.getElementById("photo");
+
+  box.innerHTML = `
+    <h2>Happy New Year, ${name} 🎉</h2>
+    <p style="margin-top:10px;opacity:0.8;">Glad you made it this far.</p>
+  `;
+
   if(friends[name]){
     img.src = friends[name];
     img.style.display = "block";
+    box.appendChild(img);
   }
 
-  /* move to cashback after delay */
+  /* REDIRECT TO CASHBACK AFTER A SHORT DELAY */
   setTimeout(()=>{
     window.location.href="cashback.html";
   },3500);
