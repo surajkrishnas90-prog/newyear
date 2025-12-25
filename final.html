@@ -30,7 +30,6 @@ body{
   width:90%;
   max-width:420px;
   animation:fadeIn 1.5s ease;
-  position:relative;
 }
 
 p{
@@ -78,26 +77,6 @@ h1{
   font-size:26px;
 }
 
-.cashback{
-  position:absolute;
-  top:-80px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#0f3;
-  color:#000;
-  padding:12px 20px;
-  border-radius:10px;
-  font-size:16px;
-  opacity:0;
-  animation:drop 1s forwards;
-}
-
-.fake-note{
-  margin-top:15px;
-  font-size:14px;
-  opacity:0.8;
-}
-
 @keyframes fadeIn{
   from{opacity:0;transform:translateY(20px)}
   to{opacity:1;transform:translateY(0)}
@@ -105,10 +84,6 @@ h1{
 
 @keyframes pop{
   to{opacity:1;transform:scale(1)}
-}
-
-@keyframes drop{
-  to{top:10px;opacity:1}
 }
 </style>
 </head>
@@ -124,15 +99,21 @@ h1{
 </div>
 
 <script>
+/* ================================
+   FRIENDS SETUP (EDIT ONLY THIS)
+   ================================ */
+
 const friends = {
-  "atlanta": "atlanta.jpeg",
-  "ali": "ali.jpeg",
-  "ammu": "ammu.jpeg",
-  "kichu": "kichu.jpeg",
-  "mani": "mani.jpeg",
-  "nibin": "nibin.jpeg",
-  "unni": "unni.jpeg"
+  "atlanta": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/atlanta.jpeg",
+  "ali": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/ali.jpeg",
+  "ammu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/ammu.jpeg",
+  "kichu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/kichu.jpeg",
+  "mani": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/mani.jpeg",
+  "nibin": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/nibin.jpeg",
+  "unni": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/unni.jpeg"
 };
+
+/* ================================ */
 
 function normalize(text){
   return text.toLowerCase().trim();
@@ -148,15 +129,11 @@ function showWish(){
     box.innerHTML = `
       <img src="${friends[name]}" alt="${name}">
       <h1>Happy New Year, ${name} 🎉</h1>
-      <div class="cashback">💸 Cashback credited ₹999</div>
-      <div class="fake-note">Just kidding 😄<br>You already got something better — memories.</div>
     `;
   } else {
     box.innerHTML = `
       <h1>Happy New Year 🎉</h1>
       <p>Wishing you a calm and beautiful year ahead.</p>
-      <div class="cashback">💸 Cashback credited ₹999</div>
-      <div class="fake-note">Relax 😄 It’s just for fun.</div>
     `;
   }
 }
