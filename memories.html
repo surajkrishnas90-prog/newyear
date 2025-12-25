@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Memories</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#0b1d2a;
+  overflow:hidden;
+}
+
+/* falling photos */
+img{
+  position:absolute;
+  width:min(90px,22vw);
+  opacity:0.85;
+  animation:fall linear infinite;
+  border-radius:6px;
+}
+
+@keyframes fall{
+  from{ top:-120px }
+  to{ top:110vh }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND MUSIC -->
+<audio id="music"
+  src="Lovely(BigTzet Amapiano Remix 2021).mp3"
+  loop>
+</audio>
+
+<script>
+/* YOUR PHOTOS (exact file names from your repo) */
+const images = [
+  "me1.jpeg","me2.jpeg","me3.jpeg","me4.jpeg",
+  "me5.jpeg","me6.jpeg","me7.jpeg","me8.jpeg",
+  "me9.jpeg","me10.jpeg","me11.jpeg","me12.jpeg"
+];
+
+const music = document.getElementById("music");
+
+/* start music after first click (browser-safe) */
+document.addEventListener("click", ()=>{
+  music.volume = 0.25;   // soft & clean
+  music.play();
+},{ once:true });
+
+/* create photo rain */
+setInterval(()=>{
+  const img = document.createElement("img");
+  img.src = images[Math.floor(Math.random()*images.length)];
+  img.style.left = Math.random()*100 + "vw";
+  img.style.animationDuration = (7 + Math.random()*7) + "s";
+  document.body.appendChild(img);
+
+  setTimeout(()=>img.remove(),14000);
+},500);
+
+/* move to next page automatically */
+setTimeout(()=>{
+  window.location.href = "name.html";
+},14000);
+</script>
+
+</body>
+</html>
