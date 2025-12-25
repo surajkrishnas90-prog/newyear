@@ -6,94 +6,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
   background:#0b1d2a;
   overflow:hidden;
+  color:#e8f6f5;
+  font-family:monospace;
 }
 
-/* overlay */
-#startOverlay{
+/* overlay start */
+#start{
   position:fixed;
   inset:0;
   background:#0b1d2a;
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#e8f6f5;
-  font-family:monospace;
   font-size:16px;
-  z-index:10;
   cursor:pointer;
+  z-index:10;
 }
 
-/* falling photos */
+/* end hint */
+#ending{
+  position:fixed;
+  bottom:20px;
+  width:100%;
+  text-align:center;
+  font-size:13px;
+  opacity:0.6;
+  display:none;
+}
+
+/* falling images */
 img{
   position:absolute;
   width:min(90px,22vw);
   opacity:0.85;
-  animation:fall linear infinite;
   border-radius:6px;
+  animation:fall linear infinite;
 }
 
 @keyframes fall{
-  from{ top:-120px }
-  to{ top:110vh }
+  from{top:-120px}
+  to{top:110vh}
 }
 </style>
 </head>
 
 <body>
 
-<div id="startOverlay">Tap to continue</div>
+<div id="start">Tap to continue</div>
+<div id="ending">Moving on…</div>
 
 <audio id="music"
-  src="
-https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/Lovely(BigTzet%20Amapiano%20R%20emix%202021).mp3"
+  src="Lovely(BigTzet Amapiano Remix 2021).mp3"
   loop>
 </audio>
 
 <script>
-const images = [
+const images=[
   "me1.jpeg","me2.jpeg","me3.jpeg","me4.jpeg",
   "me5.jpeg","me6.jpeg","me7.jpeg","me8.jpeg",
   "me9.jpeg","me10.jpeg","me11.jpeg","me12.jpeg"
 ];
 
-const music = document.getElementById("music");
-const overlay = document.getElementById("startOverlay");
+const music=document.getElementById("music");
+const start=document.getElementById("start");
+const ending=document.getElementById("ending");
 
-/* start EVERYTHING on user tap */
-overlay.addEventListener("click", ()=>{
-  overlay.style.display = "none";
+let rainInterval;
 
-  music.volume = 0.25;
+/* start everything on tap */
+start.onclick=()=>{
+  start.style.display="none";
+
+  music.volume=0.25;
   music.play();
 
-  startRain();
-
-  setTimeout(()=>{
-    window.location.href = "name.html";
-  },14000);
-});
-
-/* photo rain */
-function startRain(){
-  setInterval(()=>{
-    const img = document.createElement("img");
-    img.src = images[Math.floor(Math.random()*images.length)];
-    img.style.left = Math.random()*100 + "vw";
-    img.style.animationDuration = (7 + Math.random()*7) + "s";
+  rainInterval=setInterval(()=>{
+    const img=document.createElement("img");
+    img.src=images[Math.floor(Math.random()*images.length)];
+    img.style.left=Math.random()*100+"vw";
+    img.style.animationDuration=(7+Math.random()*7)+"s";
     document.body.appendChild(img);
     setTimeout(()=>img.remove(),14000);
   },500);
-}
-</script>
 
-</body>
-</html>
+  // show ending hint before redi
