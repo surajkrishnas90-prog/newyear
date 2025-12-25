@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy New Year</title>
+<title>Memories</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -10,135 +10,90 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family:monospace;
 }
 
 body{
   background:#0b1d2a;
-  color:#e8f6f5;
-  height:100vh;
+  overflow:hidden;
+}
+
+/* overlay */
+#startOverlay{
+  position:fixed;
+  inset:0;
+  background:#0b1d2a;
   display:flex;
   align-items:center;
   justify-content:center;
-}
-
-.container{
-  text-align:center;
-  background:#122f3a;
-  padding:40px;
-  border-radius:14px;
-  width:90%;
-  max-width:420px;
-  animation:fadeIn 1.5s ease;
-}
-
-p{
-  font-size:18px;
-  margin-bottom:20px;
-}
-
-input{
-  width:100%;
-  padding:12px;
+  color:#e8f6f5;
+  font-family:monospace;
   font-size:16px;
-  border-radius:6px;
-  border:none;
-  outline:none;
-}
-
-button{
-  margin-top:20px;
-  padding:12px 28px;
-  background:#00d1c1;
-  color:#003;
-  border:none;
-  border-radius:6px;
+  z-index:10;
   cursor:pointer;
-  font-size:16px;
 }
 
-button:hover{
-  opacity:0.9;
-}
-
+/* falling photos */
 img{
-  width:160px;
-  height:160px;
-  object-fit:cover;
-  border-radius:50%;
-  margin-top:25px;
-  opacity:0;
-  transform:scale(0.7);
-  animation:pop 1s forwards;
+  position:absolute;
+  width:min(90px,22vw);
+  opacity:0.85;
+  animation:fall linear infinite;
+  border-radius:6px;
 }
 
-h1{
-  margin-top:20px;
-  font-size:26px;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-@keyframes pop{
-  to{opacity:1;transform:scale(1)}
+@keyframes fall{
+  from{ top:-120px }
+  to{ top:110vh }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="box">
-  <p>One last thing.</p>
-  <p>Tell me your name.</p>
+<div id="startOverlay">Tap to continue</div>
 
-  <input id="friendName" placeholder="Type your name">
-  <button onclick="showWish()">Continue</button>
-</div>
+<audio id="music"
+  src="
+https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/Lovely(BigTzet%20Amapiano%20R%20emix%202021).mp3"
+  loop>
+</audio>
 
 <script>
-/* ================================
-   FRIENDS SETUP (EDIT ONLY THIS)
-   ================================ */
+const images = [
+  "me1.jpeg","me2.jpeg","me3.jpeg","me4.jpeg",
+  "me5.jpeg","me6.jpeg","me7.jpeg","me8.jpeg",
+  "me9.jpeg","me10.jpeg","me11.jpeg","me12.jpeg"
+];
 
-const friends = {
-  "atlanta": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/atlanta.jpeg",
-  "ali": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/ali.jpeg",
-  "ammu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/ammu.jpeg",
-  "kichu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/kichu.jpeg",
-  "mani": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/mani.jpeg",
-  "nibin": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/nibin.jpeg",
-  "unni": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/unni.jpeg"
-};
+const music = document.getElementById("music");
+const overlay = document.getElementById("startOverlay");
 
-/* ================================ */
+/* start EVERYTHING on user tap */
+overlay.addEventListener("click", ()=>{
+  overlay.style.display = "none";
 
-function normalize(text){
-  return text.toLowerCase().trim();
-}
+  music.volume = 0.25;
+  music.play();
 
-function showWish(){
-  const name = normalize(document.getElementById("friendName").value);
-  if(!name) return;
+  startRain();
 
-  const box = document.getElementById("box");
+  setTimeout(()=>{
+    window.location.href = "name.html";
+  },14000);
+});
 
-  if(friends[name]){
-    box.innerHTML = `
-      <img src="${friends[name]}" alt="${name}">
-      <h1>Happy New Year, ${name} 🎉</h1>
-    `;
-  } else {
-    box.innerHTML = `
-      <h1>Happy New Year 🎉</h1>
-      <p>Wishing you a calm and beautiful year ahead.</p>
-    `;
-  }
+/* photo rain */
+function startRain(){
+  setInterval(()=>{
+    const img = document.createElement("img");
+    img.src = images[Math.floor(Math.random()*images.length)];
+    img.style.left = Math.random()*100 + "vw";
+    img.style.animationDuration = (7 + Math.random()*7) + "s";
+    document.body.appendChild(img);
+    setTimeout(()=>img.remove(),14000);
+  },500);
 }
 </script>
 
 </body>
 </html>
-
