@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>One Last Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:monospace;
+}
+
+body{
+  background:black;
+  color:#00ffcc;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.box{
+  text-align:center;
+  max-width:480px;
+  padding:30px;
+  border:1px solid #00ffcc;
+}
+
+p{
+  margin:18px 0;
+  font-size:18px;
+}
+
+input{
+  background:black;
+  border:1px solid #00ffcc;
+  color:#00ffcc;
+  padding:12px;
+  width:100%;
+  font-size:16px;
+  outline:none;
+}
+
+button{
+  margin-top:25px;
+  background:transparent;
+  border:1px solid #00ffcc;
+  color:#00ffcc;
+  padding:12px 26px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+button:hover{
+  background:#00ffcc;
+  color:black;
+}
+
+.shake{
+  animation:shake 0.3s;
+}
+
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(10px)}
+  50%{transform:translateX(-10px)}
+  75%{transform:translateX(10px)}
+  100%{transform:translateX(0)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="box">
+  <p>Only for those who know me.</p>
+  <p><strong>Type my old Free Fire name.</strong></p>
+
+  <input id="answer" placeholder="Your answer">
+  <button onclick="check()">SUBMIT</button>
+
+  <p id="tries">Attempts left: 5</p>
+</div>
+
+<script>
+let attempts = 5;
+
+function normalize(text){
+  return text.toLowerCase().replace(/\s+/g,"").trim();
+}
+
+function check(){
+  const input = normalize(document.getElementById("answer").value);
+  const box = document.getElementById("box");
+
+  if(!input) return;
+
+  // valid answers
+  if(input === "b2wraiden" || input === "raiden"){
+    window.location.href = "memories.html";
+  } else {
+    attempts--;
+    document.getElementById("tries").innerText =
+      "Attempts left: " + attempts;
+
+    box.classList.add("shake");
+    setTimeout(()=>box.classList.remove("shake"),300);
+
+    if(attempts <= 0){
+      document.body.innerHTML = `
+        <div style="
+          color:#00ffcc;
+          font-family:monospace;
+          text-align:center;
+          padding:40px;">
+          <p>sorryyyy.</p>
+        </div>
+      `;
+    }
+  }
+}
+</script>
+
+</body>
+</html>
