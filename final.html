@@ -23,10 +23,10 @@ body{
 }
 
 .container{
-  text-align:center;
   background:#122f3a;
   padding:40px;
   border-radius:14px;
+  text-align:center;
   width:90%;
   max-width:420px;
   animation:fadeIn 1.5s ease;
@@ -94,34 +94,54 @@ h1{
   <p>One last thing.</p>
   <p>Tell me your name.</p>
 
-  <input id="friendName" placeholder="Type your name">
-  <button onclick="showWish()">Continue</button>
+  <input id="nameInput" placeholder="Type your name">
+  <button onclick="submitData()">Continue</button>
 </div>
 
+<!-- BACKGROUND MUSIC (RAW LINK) -->
+<audio id="music"
+  src="https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/Lovely(BigTzet%20Amapiano%20R%20emix%202021).mp3"
+  loop>
+</audio>
+
+<!-- HIDDEN GOOGLE FORM -->
+<form id="trackForm"
+  action="https://docs.google.com/forms/d/e/1FAIpQLScyZl0ro8xRNy57b9pX0xgYyE5QNDqK-M8NDwzFjdOqclvC_g/formResponse"
+  method="POST"
+  target="hidden_iframe"
+  style="display:none;">
+  <input name="entry.2141799663" id="formName">
+</form>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
 <script>
-/* ================================
-   FRIENDS SETUP (EDIT ONLY THIS)
-   ================================ */
-
+/* FRIEND → PHOTO (RAW LINKS – YOU CAN ADD MORE) */
 const friends = {
-  "atlanta": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/atlanta.jpeg",
-  "ali": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/ali.jpeg",
-  "ammu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/ammu.jpeg",
-  "kichu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/kichu.jpeg",
-  "mani": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/mani.jpeg",
-  "nibin": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/nibin.jpeg",
-  "unni": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/refs/heads/main/unni.jpeg"
+  "atlanta": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/atlanta.jpeg",
+  "ali": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/ali.jpeg",
+  "ammu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/ammu.jpeg",
+  "kichu": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/kichu.jpeg",
+  "mani": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/mani.jpeg",
+  "nibin": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/nibin.jpeg",
+  "unni": "https://raw.githubusercontent.com/surajkrishnas90-prog/newyear/main/unni.jpeg"
 };
-
-/* ================================ */
 
 function normalize(text){
   return text.toLowerCase().trim();
 }
 
-function showWish(){
-  const name = normalize(document.getElementById("friendName").value);
+function submitData(){
+  const name = normalize(document.getElementById("nameInput").value);
   if(!name) return;
+
+  /* PLAY MUSIC (USER CLICK → ALLOWED) */
+  const music = document.getElementById("music");
+  music.volume = 0.25;
+  music.play();
+
+  /* SEND NAME TO GOOGLE FORM */
+  document.getElementById("formName").value = name;
+  document.getElementById("trackForm").submit();
 
   const box = document.getElementById("box");
 
