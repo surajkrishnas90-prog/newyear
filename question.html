@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Identity Check</title>
+<title>One Question</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -14,157 +14,160 @@
 }
 
 body{
-  background:black;
-  color:#00ffcc;
-  height:100vh;
-  display:flex;
+  background:#0b1d2a;
+  color:#e8f6f5;
+  min-height:200vh;
+}
+
+/* content */
+.content{
+  max-width:700px;
+  margin:auto;
+  padding:80px 20px;
+  text-align:center;
+}
+
+.content p{
+  font-size:20px;
+  margin:80px 0;
+  opacity:0.85;
+}
+
+/* popup overlay */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
 }
 
-.container{
-  text-align:center;
-  max-width:520px;
+/* popup box */
+.popup{
+  background:#122f3a;
+  border-radius:12px;
   padding:30px;
-  border:1px solid #00ffcc;
-  box-shadow:0 0 20px rgba(0,255,204,0.3);
-  animation:fadeIn 1s ease;
+  max-width:420px;
+  width:90%;
+  text-align:center;
+  transform:scale(0.9);
+  opacity:0;
+  transition:all 0.4s ease;
 }
 
-p{
-  margin:18px 0;
+.popup.show{
+  transform:scale(1);
+  opacity:1;
+}
+
+.popup p{
+  margin:15px 0;
   font-size:18px;
 }
 
 input{
-  background:black;
-  border:1px solid #00ffcc;
-  color:#00ffcc;
-  padding:12px;
   width:100%;
-  font-size:16px;
-  outline:none;
+  padding:12px;
   margin-top:10px;
-}
-
-input:focus{
-  box-shadow:0 0 10px #00ffcc;
+  border-radius:6px;
+  border:none;
+  outline:none;
+  font-size:16px;
 }
 
 button{
-  margin-top:30px;
-  background:transparent;
-  border:1px solid #00ffcc;
-  color:#00ffcc;
-  padding:12px 28px;
+  margin-top:20px;
+  padding:12px 24px;
+  background:#00d1c1;
+  color:#003;
+  border:none;
+  border-radius:6px;
   cursor:pointer;
   font-size:16px;
 }
 
 button:hover{
-  background:#00ffcc;
-  color:black;
+  opacity:0.9;
 }
 
-/* animations */
-@keyframes shake{
-  0%{transform:translate(0)}
-  25%{transform:translate(10px)}
-  50%{transform:translate(-10px)}
-  75%{transform:translate(10px)}
-  100%{transform:translate(0)}
-}
-
-@keyframes flash{
-  0%{background:black}
-  50%{background:#00ffcc}
-  100%{background:black}
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:scale(0.95)}
-  to{opacity:1;transform:scale(1)}
-}
-
-.error{
-  animation:shake 0.3s infinite;
-}
-
-.flash{
-  animation:flash 0.15s 3;
+#tries{
+  margin-top:12px;
+  font-size:14px;
+  opacity:0.7;
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO -->
-<audio id="typeSound" src="type.mp3"></audio>
-<audio id="clickSound" src="click.mp3"></audio>
-<audio id="errorSound" src="error.mp3"></audio>
-<audio id="successSound" src="success.mp3"></audio>
+<div class="content">
+  <p>Some things are only meant for people who truly know you.</p>
+  <p>This isn’t a test.</p>
+  <p>Just a small check.</p>
+  <p>Scroll slowly.</p>
+</div>
 
-<div class="container" id="box">
-
-  <p>Identify yourself.</p>
-  <input id="userName" placeholder="Your name">
-
-  <p style="margin-top:30px;">One more thing.</p>
-  <p><strong>Who is my best friend?</strong></p>
-  <input id="bestFriend" placeholder="Type the name">
-
-  <button onclick="check()">VERIFY</button>
-
+<!-- POPUP -->
+<div class="overlay" id="overlay">
+  <div class="popup" id="popup">
+    <p><strong>Type my old Free Fire name</strong></p>
+    <input id="answer" placeholder="Type here">
+    <button onclick="check()">Continue</button>
+    <div id="tries">Attempts left: 5</div>
+  </div>
 </div>
 
 <script>
-const typeSound = document.getElementById("typeSound");
-const clickSound = document.getElementById("clickSound");
-const errorSound = document.getElementById("errorSound");
-const successSound = document.getElementById("successSound");
-const box = document.getElementById("box");
-
-document.querySelectorAll("input").forEach(input=>{
-  input.addEventListener("keydown",()=>{
-    typeSound.currentTime = 0;
-    typeSound.play();
-  });
-});
+let attempts = 5;
+let popupShown = false;
 
 function normalize(text){
-  return text.toLowerCase().trim();
+  return text.toLowerCase().replace(/\s+/g,"").trim();
 }
 
-function check(){
-  clickSound.play();
-
-  const name = normalize(document.getElementById("userName").value);
-  const answer = normalize(document.getElementById("bestFriend").value);
-
-  if(!name || !answer){
-    alert("Complete the fields.");
-    return;
+/* show popup after scroll */
+window.addEventListener("scroll", ()=>{
+  if(window.scrollY > 250 && !popupShown){
+    popupShown = true;
+    document.getElementById("overlay").style.display = "flex";
+    setTimeout(()=>{
+      document.getElementById("popup").classList.add("show");
+    },50);
   }
+});
 
-  if(answer === name){
-    successSound.play();
-    document.body.classList.add("flash");
-    setTimeout(()=>{
-      window.location.href = "gate.html";
+function check(){
+  const input = normalize(document.getElementById("answer").value);
 
-    },1200);
+  if(!input) return;
+
+  if(input === "raiden" || input === "b2wraiden"){
+    window.location.href = "gate.html"; // or memories.html
   } else {
-    errorSound.play();
-    box.classList.add("error");
-    alert("No. You are my best friend.");
-    setTimeout(()=>{
-      box.classList.remove("error");
-    },1200);
+    attempts--;
+    document.getElementById("tries").innerText =
+      "Attempts left: " + attempts;
+
+    if(attempts <= 0){
+      document.body.innerHTML = `
+        <div style="
+          height:100vh;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-family:monospace;
+          color:#e8f6f5;
+          background:#0b1d2a;
+          font-size:22px;
+        ">
+          sorryyyy.
+        </div>
+      `;
+    }
   }
 }
 </script>
 
 </body>
 </html>
-
