@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Identity Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:monospace;
+}
+
+body{
+  background:black;
+  color:#00ffcc;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.container{
+  text-align:center;
+  max-width:520px;
+  padding:30px;
+  border:1px solid #00ffcc;
+  box-shadow:0 0 20px rgba(0,255,204,0.3);
+  animation:fadeIn 1s ease;
+}
+
+p{
+  margin:18px 0;
+  font-size:18px;
+}
+
+input{
+  background:black;
+  border:1px solid #00ffcc;
+  color:#00ffcc;
+  padding:12px;
+  width:100%;
+  font-size:16px;
+  outline:none;
+  margin-top:10px;
+}
+
+input:focus{
+  box-shadow:0 0 10px #00ffcc;
+}
+
+button{
+  margin-top:30px;
+  background:transparent;
+  border:1px solid #00ffcc;
+  color:#00ffcc;
+  padding:12px 28px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+button:hover{
+  background:#00ffcc;
+  color:black;
+}
+
+/* animations */
+@keyframes shake{
+  0%{transform:translate(0)}
+  25%{transform:translate(10px)}
+  50%{transform:translate(-10px)}
+  75%{transform:translate(10px)}
+  100%{transform:translate(0)}
+}
+
+@keyframes flash{
+  0%{background:black}
+  50%{background:#00ffcc}
+  100%{background:black}
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(0.95)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.error{
+  animation:shake 0.3s infinite;
+}
+
+.flash{
+  animation:flash 0.15s 3;
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUDIO -->
+<audio id="typeSound" src="type.mp3"></audio>
+<audio id="clickSound" src="click.mp3"></audio>
+<audio id="errorSound" src="error.mp3"></audio>
+<audio id="successSound" src="success.mp3"></audio>
+
+<div class="container" id="box">
+
+  <p>Identify yourself.</p>
+  <input id="userName" placeholder="Your name">
+
+  <p style="margin-top:30px;">One more thing.</p>
+  <p><strong>Who is my best friend?</strong></p>
+  <input id="bestFriend" placeholder="Type the name">
+
+  <button onclick="check()">VERIFY</button>
+
+</div>
+
+<script>
+const typeSound = document.getElementById("typeSound");
+const clickSound = document.getElementById("clickSound");
+const errorSound = document.getElementById("errorSound");
+const successSound = document.getElementById("successSound");
+const box = document.getElementById("box");
+
+document.querySelectorAll("input").forEach(input=>{
+  input.addEventListener("keydown",()=>{
+    typeSound.currentTime = 0;
+    typeSound.play();
+  });
+});
+
+function normalize(text){
+  return text.toLowerCase().trim();
+}
+
+function check(){
+  clickSound.play();
+
+  const name = normalize(document.getElementById("userName").value);
+  const answer = normalize(document.getElementById("bestFriend").value);
+
+  if(!name || !answer){
+    alert("Complete the fields.");
+    return;
+  }
+
+  if(answer === name){
+    successSound.play();
+    document.body.classList.add("flash");
+    setTimeout(()=>{
+      window.location.href = "memories.html";
+    },1200);
+  } else {
+    errorSound.play();
+    box.classList.add("error");
+    alert("No. You are my best friend.");
+    setTimeout(()=>{
+      box.classList.remove("error");
+    },1200);
+  }
+}
+</script>
+
+</body>
+</html>
